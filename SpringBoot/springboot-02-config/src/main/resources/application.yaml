@@ -1,0 +1,20 @@
+server:
+  port: 8080
+# 选择激活版本
+spring:
+  profiles:
+    active: dev
+---
+server:
+  port: 8081
+spring:
+  profiles: dev
+---
+server:
+  port: 8082
+spring:
+  profiles: test
+
+
+# 在配置文件中能配置的属性，都存在一个固有规律
+# xxxAutoConfiguration  xxxProperties  配置文件绑定
