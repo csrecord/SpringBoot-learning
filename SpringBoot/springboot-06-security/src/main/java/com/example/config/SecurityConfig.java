@@ -23,7 +23,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/level3/**").hasRole("vip3");
 
         //没有权限默认会到登录页面,开启需要登录的页面
-        http.formLogin();
+        http.formLogin().loginPage("/toLogin").loginProcessingUrl("/login");
+
+        //注销,移除cookie，移除session,注销成功跳转到主页界面
+        http.logout().logoutSuccessUrl("/");
+
+        //开启记住我功能
+        http.rememberMe();
+
+
     }
 
     @Override
@@ -36,6 +44,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("root").password(new BCryptPasswordEncoder().encode("123456")).roles("vip1","vip2","vip3")
                 .and()
                 .withUser("guest").password(new BCryptPasswordEncoder().encode("123456")).roles("vip1");
-
     }
 }
