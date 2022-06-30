@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.chenhf.pojo")
+@MapperScan("com.chenhf.mapper")
 //MapperScan指定要扫描的Mapper类的包的路径
 public class SeckillDemoApplication {
     public static void main(String[] args) {
