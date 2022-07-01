@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 /**
  * @description: 登录跳转controller
  * @className: LoginController
@@ -53,10 +57,11 @@ public class LoginController {
      */
     @RequestMapping("/doLogin")
     @ResponseBody
-    public RespBean doLogin(LoginVo loginVo){
+    //加入validation校验功能
+    public RespBean doLogin(@Valid LoginVo loginVo, HttpServletRequest request, HttpServletResponse response){
         //用来测试用户输入
         //log.info("{}",loginVo);
         //Controller调用service
-        return userService.doLogin(loginVo);
+        return userService.doLogin(loginVo, request, response);
     }
 }
