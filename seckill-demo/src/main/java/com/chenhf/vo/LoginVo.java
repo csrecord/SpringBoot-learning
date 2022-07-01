@@ -1,6 +1,10 @@
 package com.chenhf.vo;
 
+import com.chenhf.validator.IsMobile;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @description: TODO
@@ -13,6 +17,12 @@ import lombok.Data;
 //相当于后端的mobile password
 @Data
 public class LoginVo {
+    //使用validation组件, 减少代码冗余
+    @NotNull()
+    //创建的自定义组件
+    @IsMobile
     private String mobile;
+    @NotNull
+    @Length(min=32)
     private String password;
 }
