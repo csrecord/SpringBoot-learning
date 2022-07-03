@@ -2,7 +2,6 @@ package com.chenhf.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.chenhf.pojo.User;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**
