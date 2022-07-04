@@ -1,9 +1,9 @@
 package com.chenhf.service.serviceImpl;
 
-import com.chenhf.pojo.User;
-import com.chenhf.mapper.UserMapper;
-import com.chenhf.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chenhf.mapper.OrderMapper;
+import com.chenhf.pojo.Order;
+import com.chenhf.service.IOrderService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +14,6 @@ import org.springframework.stereotype.Service;
  * @author chenhf
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
 
 }

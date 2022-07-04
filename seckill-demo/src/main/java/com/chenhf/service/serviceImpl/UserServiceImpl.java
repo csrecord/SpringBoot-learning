@@ -13,7 +13,9 @@ import com.chenhf.vo.LoginVo;
 import com.chenhf.vo.RespBean;
 import com.chenhf.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author chenhf
  */
-//@SuppressWarnings("all")
+@SuppressWarnings("all")
 //service层
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
@@ -34,6 +36,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     //Service调用Mapper
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * @description 登录接口实现类, 处理登录业务逻辑, 包含参数校验等功能
@@ -74,9 +78,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         //生成cookie
         String ticket = UUIDUtil.uuid();
+        //使用redis存储用户信息
+        //将用户信息存入redis中
+        redisTemplate.opsForValue().set("user:"+ticket, user);
         //key就是cookie,值就是user对象
-        request.getSession().setAttribute(ticket, user);
+        //request.getSession().setAttribute(ticket, user);
         CookieUtil.setCookie(request,response,"userTicket",ticket);
         return RespBean.success();
+    }
+
+    /**
+     * @description getUserByCookie
+     * @param userTicket
+     * @return User
+     * @author Chenhf
+     * @date 2022/7/4 15:44
+     */
+    @Override
+    public User getUserByCookie(String userTicket, HttpServletRequest request, HttpServletResponse response) {
+        if (StringUtils.isEmpty(userTicket)){
+            return null;
+        }
+        User user = (User) redisTemplate.opsForValue().get("user:" + userTicket);
+        if (user != null){
+            CookieUtil.setCookie(request, response, "userTicket", userTicket);
+        }
+        return user;
     }
 }

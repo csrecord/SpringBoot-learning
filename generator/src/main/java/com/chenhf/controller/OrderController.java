@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
  * @author chenhf
  */
 @Controller
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/order")
+public class OrderController {
 
 }

@@ -28,6 +28,7 @@ import javax.validation.Valid;
 @RequestMapping("/login")
 //输出日志的
 @Slf4j
+@SuppressWarnings("all")
 public class LoginController {
 
     //Controller调用Service, 使用Autowired注入

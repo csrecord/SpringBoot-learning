@@ -2,6 +2,24 @@ spring:
   # thymeleaf配置
   thymeleaf:
     cache: false
+  # redis配置
+  redis:
+    host: 106.13.229.77
+    port: 6399
+    password: redis6399
+    database: 0
+    timeout: 10000ms
+    lettuce:
+      pool:
+        # 最大连接数, 默认8
+        max-active: 8
+        # 最大连接阻塞等待时间, 默认-1
+        max-wait: 10000ms
+        # 最小空闲连接
+        max-idle: 200
+        # 最大空闲连接
+        min-idle: 5
+
   # 数据源
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -27,6 +45,7 @@ spring:
       # 测试连接是否可用的查询语句
       connection-test-query: SELECT 1
 
+
 # mybatis-plus配置
 mybatis-plus:
   # 配置mapper.xml映射文件
@@ -38,3 +57,5 @@ mybatis-plus:
 logging:
   level:
     com.chenhf.mapper: debug
+# server:
+  # port: 8081

@@ -1,6 +1,6 @@
 package com.chenhf.service;
 
-import com.chenhf.pojo.User;
+import com.chenhf.pojo.Goods;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -10,6 +10,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *
  * @author chenhf
  */
-public interface IUserService extends IService<User> {
+public interface IGoodsService extends IService<Goods> {
 
 }

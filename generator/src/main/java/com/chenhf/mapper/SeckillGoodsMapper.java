@@ -1,6 +1,6 @@
 package com.chenhf.mapper;
 
-import com.chenhf.pojo.User;
+import com.chenhf.pojo.SeckillGoods;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -10,6 +10,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  *
  * @author chenhf
  */
-public interface UserMapper extends BaseMapper<User> {
+public interface SeckillGoodsMapper extends BaseMapper<SeckillGoods> {
 
 }
