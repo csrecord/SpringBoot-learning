@@ -1,4 +1,21 @@
 spring:
+  # 启用默认静态资源处理,开启缓存
+  resources:
+    add-mappings: true
+    cache:
+      cachecontrol:
+        # 缓存响应时间
+        max-age: 3600
+    chain:
+      # 资源链启动缓存,默认启动
+      cache: true
+      # 启用资源连,默认禁用
+      enabled: true
+      # 压缩资源(gzip), 默认禁用
+      compressed: true
+      # 开启h5的应用缓存
+      html-application-cache: true
+    static-locations: classpath:/static/
   # thymeleaf配置
   thymeleaf:
     cache: false
@@ -23,7 +40,7 @@ spring:
   # 数据源
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
     password: pwd3Y#fLiQM0m_+
     # 数据库连接池

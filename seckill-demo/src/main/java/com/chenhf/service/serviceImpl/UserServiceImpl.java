@@ -14,11 +14,13 @@ import com.chenhf.vo.RespBean;
 import com.chenhf.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -53,27 +55,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public RespBean doLogin(LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) {
         String mobile = loginVo.getMobile();
         String password = loginVo.getPassword();
-        ////参数校验，使用springboot-starter-validation JSR303校验
-        //if (StringUtils.isEmpty(mobile)||StringUtils.isEmpty(password)){
-        //    //在这里调用了枚举类型
-        //    return RespBean.error(RespBeanEnum.LOGIN_ERROR);
-        //}
-        ////登录业务逻辑处理
-        //if (!ValidatorUtil.isMobile(mobile)){
-        //    return RespBean.error(RespBeanEnum.MOBILE_ERROR);
-        //}
         //获取user
         User user = userMapper.selectById(mobile);
         if (user == null){
             //改造返回值, 异常处理的方式
             //定义完异常之后这样放进去
             throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
-            //return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
         //如果用户密码不正确
         if (!MD5Util.formPassToDBPass(password, user.getSalt()).equals(user.getPassword())){
             throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
-            //return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
 
         //生成cookie
@@ -84,7 +75,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         //key就是cookie,值就是user对象
         //request.getSession().setAttribute(ticket, user);
         CookieUtil.setCookie(request,response,"userTicket",ticket);
-        return RespBean.success();
+        return RespBean.success(ticket);
     }
 
     /**
@@ -99,10 +90,41 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (StringUtils.isEmpty(userTicket)){
             return null;
         }
+        //当时为了解决分布式情况下用户不一致的问题,缓存的是user对象,没有考虑缓存的失效时间
         User user = (User) redisTemplate.opsForValue().get("user:" + userTicket);
         if (user != null){
             CookieUtil.setCookie(request, response, "userTicket", userTicket);
         }
         return user;
     }
+
+    /**
+     * @description 更新密码
+     * @param userTicket
+     * @param password
+     * @param httpServletRequest
+     * @param response
+     * @return RespBean
+     * @author Chenhf
+     * @date 2022/7/7 21:40
+     */
+    @Override
+    public RespBean updatePassword(String userTicket, String password,
+                                   HttpServletRequest request, HttpServletResponse response) {
+        User user = getUserByCookie(userTicket, request, response);
+        if (user==null){
+            //如果用户不存在抛出异常
+            throw new GlobalException(RespBeanEnum.MOBILE_NOT_EXIST);
+        }
+        user.setPassword(MD5Util.inputPassToDBPass(password,user.getSalt()));
+        int result = userMapper.updateById(user);
+        if (result==1){
+            //删除redis
+            redisTemplate.delete("user:"+userTicket);
+            return RespBean.success();
+        }
+        return RespBean.error(RespBeanEnum.PASSWORD_UPDATE_FAIL);
+    }
 }
+
+
