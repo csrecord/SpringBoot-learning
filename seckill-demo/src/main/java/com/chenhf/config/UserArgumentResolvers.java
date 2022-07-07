@@ -38,11 +38,13 @@ public class UserArgumentResolvers implements HandlerMethodArgumentResolver {
                                   WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
+        //cookie
         String ticket = CookieUtil.getCookieValue(request, "userTicket");
         //查看用是否存在
         if (StringUtils.isEmpty(ticket)){
             return null;
         }
+        //获取user的方法,根据ticket获取对应的user
         return userService.getUserByCookie(ticket, request, response);
     }
 }

@@ -2,19 +2,24 @@ package com.chenhf.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chenhf.exception.GlobalException;
 import com.chenhf.mapper.OrderMapper;
 import com.chenhf.pojo.Order;
 import com.chenhf.pojo.SeckillGoods;
 import com.chenhf.pojo.SeckillOrder;
 import com.chenhf.pojo.User;
+import com.chenhf.service.IGoodsService;
 import com.chenhf.service.IOrderService;
 import com.chenhf.service.ISeckillGoodsService;
 import com.chenhf.service.ISeckillOrderService;
 import com.chenhf.vo.GoodsVo;
+import com.chenhf.vo.OrderDetailVo;
+import com.chenhf.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -31,6 +36,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private OrderMapper orderMapper;
     @Autowired
     ISeckillOrderService seckillOrderService;
+    @Autowired
+    IGoodsService goodsService;
 
     @Override
     public Order seckill(User user, GoodsVo goods) {
@@ -59,5 +66,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         seckillOrder.setGoodsId(goods.getId());
         seckillOrderService.save(seckillOrder);
         return order;
+    }
+
+    @Override
+    public OrderDetailVo detail(Long orderId) {
+        if (orderId==null){
+            throw new GlobalException(RespBeanEnum.ORDER_NOT_EXIST);
+        }
+        Order order = orderMapper.selectById(orderId);
+        GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(order.getGoodsId());
+        OrderDetailVo detail = new OrderDetailVo();
+        detail.setOrder(order);
+        detail.setGoodsVo(goodsVo);
+        return detail;
     }
 }
