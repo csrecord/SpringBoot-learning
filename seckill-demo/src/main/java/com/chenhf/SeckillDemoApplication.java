@@ -16,11 +16,11 @@ public class SeckillDemoApplication {
  *
  * 接口测试：
  *          商品接口：/goods/toList
- *          windows QPS（50000次）优化前4012.2  优化后
- *          linux   QPS(10000次) 优化前395.6   优化后
+ *          windows QPS优化前1400    优化后2700
+ *          linux   QPS优化前395.6   优化后
  *
  *          秒杀接口：/seckill/doSeckill
- *          windows QPS(10000次) 优化前2283.6  优化后
+ *          windows QPS优化前785  优化后1435
  *
  */
 }
