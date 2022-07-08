@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <td>下单时间</td>
-            <td id="createTime" colspan="2"></td>
+            <td id="createDate" colspan="2"></td>
         </tr>
         <tr>
             <td>订单状态</td>
@@ -92,7 +92,7 @@
         $("#goodsName").text(goods.goodsName);
         $("#goodsImg").attr("src",goods.goodsImg);
         $("#goodsPrice").text(order.goodsPrice);
-        $("#createTime").text(new Date(order.createTime).format("yyyy-MM-dd HH:mm:ss"));
+        $("#createDate").text(new Date(order.createDate).format("yyyy-MM-dd HH:mm:ss"));
         var status = order.status;
         var statusText = "";
         switch (status) {
