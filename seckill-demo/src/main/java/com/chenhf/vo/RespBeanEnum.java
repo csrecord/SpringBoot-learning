@@ -35,7 +35,7 @@ public enum RespBeanEnum {
     ACCESS_LIMIT_REACHED(500504, "访问过于频繁，请稍后重试"),
     //订单模块5003xx
     ORDER_NOT_EXIST(500300, "订单不存在"),
-
+    PATH_ERROR(500910, "路径错误"),
     ;
 
     private final Integer code;
