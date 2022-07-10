@@ -29,50 +29,9 @@ public class UserController {
      * @date 2022/7/7 15:58
      */
     @RequestMapping("/info")
+    @ResponseBody
     public RespBean info(User user){
         return RespBean.success(user);
-    }
-
-    //mq测试消息发送
-    @RequestMapping("/mq")
-    @ResponseBody
-    public void mq(){
-        mqSender.send("hello");
-    }
-
-    //mq测试消息发送
-    @RequestMapping("/mq/fanout")
-    @ResponseBody
-    public void mq01(){
-        mqSender.send("fanout");
-    }
-
-    //mq测试消息发送
-    @RequestMapping("/mq/direct01")
-    @ResponseBody
-    public void mq02(){
-        mqSender.send01("direct-red");
-    }
-
-    //mq测试消息发送
-    @RequestMapping("/mq/direct02")
-    @ResponseBody
-    public void mq03(){
-        mqSender.send02("direct-green");
-    }
-
-    //mq测试消息发送
-    @RequestMapping("/mq/topic01")
-    @ResponseBody
-    public void mq04(){
-        mqSender.send03("hello01");
-    }
-
-    //mq测试消息发送
-    @RequestMapping("/mq/topic02")
-    @ResponseBody
-    public void mq05(){
-        mqSender.send04("hello01&02");
     }
 
 }

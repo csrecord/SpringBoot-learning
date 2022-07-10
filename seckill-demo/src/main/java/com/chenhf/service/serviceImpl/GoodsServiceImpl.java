@@ -18,7 +18,6 @@ import java.util.List;
  * @author chenhf
  */
 @Service
-@SuppressWarnings("all")
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements IGoodsService {
 
     @Autowired

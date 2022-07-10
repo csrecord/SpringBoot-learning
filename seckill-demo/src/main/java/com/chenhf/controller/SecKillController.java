@@ -1,7 +1,6 @@
 package com.chenhf.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.chenhf.pojo.Order;
+import com.alibaba.fastjson.JSON;
 import com.chenhf.pojo.SeckillMessage;
 import com.chenhf.pojo.SeckillOrder;
 import com.chenhf.pojo.User;
@@ -9,7 +8,6 @@ import com.chenhf.rabbitmq.MQSender;
 import com.chenhf.service.IGoodsService;
 import com.chenhf.service.IOrderService;
 import com.chenhf.service.ISeckillOrderService;
-import com.chenhf.utils.JsonUtil;
 import com.chenhf.vo.GoodsVo;
 import com.chenhf.vo.RespBean;
 import com.chenhf.vo.RespBeanEnum;
@@ -47,7 +45,6 @@ public class SecKillController implements InitializingBean {
     private IOrderService orderService;
     @Autowired
     private RedisTemplate redisTemplate;
-
     @Autowired
     private MQSender mqSender;
 
@@ -82,23 +79,42 @@ public class SecKillController implements InitializingBean {
         }
         //4.下单流程,将用户信息及下单商品ID放入RabbitMQ中
         //用户信息及下单商品ID对象
-        SeckillMessage seckillMessage = new SeckillMessage();
+        SeckillMessage seckillMessage = new SeckillMessage(user, goodsId);
         //对象转为字符串
-        mqSender.sendSeckillMessage(JsonUtil.object2JsonStr(seckillMessage));
+        mqSender.sendSeckillMessage(JSON.toJSONString(seckillMessage));
+        //秒杀订单进入排队状态
         return RespBean.success(0);
     }
 
-    //初始化时将商品库存加载到redis中
+    /**
+     * @description 获取秒杀结果
+     * @param user
+     * @param goodsId
+     * @return orderId:成功,-1:秒杀失败,0:排队中
+     * @author Chenhf
+     * @date 2022/7/10 16:04
+     */
+    @RequestMapping(value = "/result", method = RequestMethod.GET)
+    @ResponseBody
+    public RespBean getResult(User user, Long goodsId){
+        if (user == null){
+            return RespBean.error(RespBeanEnum.ERROR);
+        }
+        Long orderId = seckillOrderService.getResult(user, goodsId);
+        return RespBean.success(orderId);
+    }
+
+    //初始化时将商品库存加载到redis中,通过redis扣减库存,通过rabbit下单操作
     @Override
     public void afterPropertiesSet() throws Exception {
         List<GoodsVo> list = goodsService.findGoodsVo();
         if (CollectionUtils.isEmpty(list)){
-            return;
+            return ;
         }
-        list.forEach(goodsVo -> {
-            redisTemplate.opsForValue().set("seckillGoods:"+goodsVo.getId(), goodsVo.getStockCount());
-            //内存标记
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+        for (GoodsVo goodsVo : list){
+            valueOperations.set("seckillGoods:"+goodsVo.getId(), goodsVo.getStockCount());
             EmptyStockMap.put(goodsVo.getId(), false);
-        });
+        }
     }
 }

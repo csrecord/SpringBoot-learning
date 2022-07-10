@@ -15,7 +15,6 @@ import java.util.Date;
  * @date: 2022/7/4 19:52
  * @version: 1.0
  */
-@SuppressWarnings("all")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

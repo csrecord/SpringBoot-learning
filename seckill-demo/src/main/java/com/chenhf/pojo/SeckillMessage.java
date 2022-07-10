@@ -2,7 +2,6 @@ package com.chenhf.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @description: TODO
@@ -13,7 +12,6 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class SeckillMessage {
     private User user;
     private Long GoodsId;
