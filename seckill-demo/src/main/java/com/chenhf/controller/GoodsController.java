@@ -81,58 +81,6 @@ public class GoodsController {
         return html;
     }
 
-    /**
-     *
-     * @param GoodsId
-     * @return
-     */
-    //url缓存优化
-    //@RequestMapping(value = "/toDetail/{goodsId}", produces = "text/html;charset=utf-8")
-    //@ResponseBody
-    //public String toDetail(Model model, User user, @PathVariable Long goodsId, HttpServletRequest request,HttpServletResponse response){
-    //
-    //    ValueOperations valueOperations = redisTemplate.opsForValue();
-    //    //(重点)与上面的方式不同:存级目录的方式将goodsId加进去
-    //    String html = (String) valueOperations.get("goodsDetail:"+goodsId);
-    //    if (!StringUtils.isEmpty(html)){
-    //        return html;
-    //    }
-    //
-    //    model.addAttribute("user",user);
-    //    GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(goodsId);
-    //    //定义秒杀状态
-    //    Date startDate = goodsVo.getStartDate();
-    //    Date endDate = goodsVo.getEndDate();
-    //    Date nowDate = new Date();
-    //    int seckillStatus = 0;
-    //    //秒杀倒计时
-    //    int remainSeconds = 0;
-    //    if (nowDate.before(startDate)){
-    //        remainSeconds = ((int) ((startDate.getTime() - nowDate.getTime()) / 1000));
-    //    } else if (nowDate.after(endDate)){
-    //        seckillStatus = 2;
-    //        remainSeconds = -1;
-    //    } else {
-    //        seckillStatus = 1;
-    //        remainSeconds = 0;
-    //    }
-    //    model.addAttribute("remainSeconds",remainSeconds);
-    //    model.addAttribute("seckillStatus",seckillStatus);
-    //    model.addAttribute("goods",goodsVo);
-    //
-    //    //return "goodsDetail";
-    //    //如果页面为null,手动渲染存入redis返回
-    //    WebContext context = new WebContext(request, response,request.getServletContext(), request.getLocale(),
-    //            model.asMap());
-    //    html = thymeleafViewResolver.getTemplateEngine().process("goodsDetail", context);
-    //    if (!StringUtils.isEmpty(html)){
-    //        //将页面存入redis,timeout,失效时间
-    //        valueOperations.set("goodsDetail:"+goodsId, html,60, TimeUnit.SECONDS);
-    //    }
-    //
-    //    return html;
-    //    //return "goodsDetail";
-    //}
 
     @RequestMapping("/detail/{goodsId}")
     @ResponseBody
