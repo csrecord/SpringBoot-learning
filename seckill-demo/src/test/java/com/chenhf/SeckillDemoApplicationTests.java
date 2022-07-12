@@ -25,7 +25,5 @@ class SeckillDemoApplicationTests {
         } else {
             System.out.println("有线程在使用,请稍后");
         }
-
     }
-
 }
