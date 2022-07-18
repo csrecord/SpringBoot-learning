@@ -175,6 +175,7 @@ public class SecKillController implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
+        //获取库存
         List<GoodsVo> list = goodsService.findGoodsVo();
         if (CollectionUtils.isEmpty(list)){
             return ;

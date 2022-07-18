@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class MQReceiver {
-
-
     @Autowired
     private IGoodsService goodsService;
     @Autowired
